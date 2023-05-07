@@ -13,7 +13,7 @@ import Cookies from "universal-cookie";
 // all components import
 import ChannelListContainer from "./components/ChannelListContainer";
 import ChannelContainer from "./components/ChannelContainer";
-
+import Auth from "./components/Auth";
 //style sheet
 import './App.css'
 //in the css used is BEM CSS -> Block element modifier  css classname contains three parts ->
@@ -23,7 +23,10 @@ import './App.css'
 
 const apiKey = "w55yfmrea2r3";
 const client = StreamChat.getInstance(apiKey);
+const authToken=false;
 const App = () => {
+  if(!authToken)
+  return <Auth/>
   return (
     <div className="app__wrapper">
       <Chat client={client} theme="team light">
