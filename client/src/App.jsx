@@ -20,21 +20,32 @@ import './App.css'
 // 1) Block -> its main component like sidebar,navbar etc
 // 2) Element-> its like small component in the main component -> button
 // 3)Modifier -> its used to set property such as disable ex:- header__button__disabled
-
+const cookies = new Cookies();
 const apiKey = "w55yfmrea2r3";
+const authToken = cookies.get("token");
 const client = StreamChat.getInstance(apiKey);
-const authToken=false;
+
+if(authToken) {
+  client.connectUser({
+      id: cookies.get('userId'),
+      name: cookies.get('username'),
+      fullName: cookies.get('fullName'),
+      image: cookies.get('avatarURL'),
+      hashedPassword: cookies.get('hashedPassword'),
+      phoneNumber: cookies.get('phoneNumber'),
+  }, authToken)
+}
+
 const App = () => {
-  if(!authToken)
-  return <Auth/>
-  // return (
-  //   <div className="app__wrapper">
-  //     <Chat client={client} theme="team light">
-  //       <ChannelListContainer />
-  //       <ChannelContainer />
-  //     </Chat>
-  //   </div>
-  // );
+  if(!authToken) return <Auth/>
+  return (
+    <div className="app__wrapper">
+      <Chat client={client} theme="team light">
+        <ChannelListContainer />
+        <ChannelContainer />
+      </Chat>
+    </div>
+  );
 };
 
 export default App;

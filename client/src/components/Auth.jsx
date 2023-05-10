@@ -6,13 +6,14 @@ import Signimage from "../assets/signup.jpg";
 import Signup from '../lotti/Signup'
 import SignIn from '../lotti/SignIn'
 
+const cookies=new Cookies();
 const initialState={
   fullName:'',
   username:'',
-  phoneNumber:'',
-  avatarURL:'',
   password:'',
   confirmPassword:'',
+  phoneNumber:'',
+  avatarURL:'',
 
 }
 const Auth = () => {
@@ -21,16 +22,39 @@ const Auth = () => {
 
   const handlechange=(e)=>{
     setForm({...form, [e.target.name]: e.target.value});
+   
     // console.log(form);
   }
+  const handlesubmit = async (e) => {
+    e.preventDefault();
+
+    const { username, password, phoneNumber, avatarURL } = form;
+
+    const URL = 'http://localhost:5000/auth';
+    
+
+    const { data: { token, userId, hashedPassword, fullName } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
+        username, password, fullName: form.fullName, phoneNumber, avatarURL,
+    });
+
+    cookies.set('token', token);
+    cookies.set('username', username);
+    cookies.set('fullName', fullName);
+    cookies.set('userId', userId);
+
+    if(isSignup) {
+        cookies.set('phoneNumber', phoneNumber);
+        cookies.set('avatarURL', avatarURL);
+        cookies.set('hashedPassword', hashedPassword);
+    }
+
+    window.location.reload();
+}
+
   const switchmode=()=>{
    setIsSignup((prevIsSignup)=>!prevIsSignup)
   }
 
-  const handlesubmit=(e)=>{
-    e.preventDefault();
-    console.log(form)
-  }
   return (
     <>
 
