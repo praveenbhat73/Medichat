@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 
 import { StreamChat } from "stream-chat";
 // Stream chat is module which helps in realtime messaging , auth, user managment
@@ -15,6 +15,7 @@ import ChannelListContainer from "./components/ChannelListContainer";
 import ChannelContainer from "./components/ChannelContainer";
 import Auth from "./components/Auth";
 //style sheet
+import 'stream-chat-react/dist/css/index.css';
 import './App.css'
 //in the css used is BEM CSS -> Block element modifier  css classname contains three parts ->
 // 1) Block -> its main component like sidebar,navbar etc
@@ -37,12 +38,26 @@ if(authToken) {
 }
 
 const App = () => {
+  const [createType, setCreateType] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   if(!authToken) return <Auth/>
   return (
     <div className="app__wrapper">
       <Chat client={client} theme="team light">
-        <ChannelListContainer />
-        <ChannelContainer />
+      <ChannelListContainer 
+                    isCreating={isCreating}
+                    setIsCreating={setIsCreating}
+                    setCreateType={setCreateType}
+                    setIsEditing={setIsEditing}
+                />
+                <ChannelContainer 
+                    isCreating={isCreating}
+                    setIsCreating={setIsCreating}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    createType={createType}
+                />
       </Chat>
     </div>
   );
